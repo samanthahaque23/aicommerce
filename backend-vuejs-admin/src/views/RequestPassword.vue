@@ -1,8 +1,5 @@
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Request New Password </h2>
-    </div>
+  <GuestLayout :title="'Request New Password'">
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST">
@@ -25,11 +22,10 @@
         </div>
       </form>
     </div>
-  </div>
+ </GuestLayout>
+
 </template>
 
-<script>
-export default {
-  name: "requestPassword"
-}
+<script setup>
+import GuestLayout from '../components/GuestLayout.vue';
 </script>
