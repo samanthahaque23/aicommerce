@@ -1,12 +1,8 @@
 <template>
     <div class="flex h-full">
-            <div class="w-[200px] bg-blue-700">
-                <p>sidebar</p>
-            </div>
+           <Sidebar/>
             <div class="flex-1">
-                <header class="h-8 shadow ">
-                    <p>header</p>
-                </header>
+              <Navbar/>
                 <main>
                    <p>ma</p>
                 </main>
@@ -15,6 +11,8 @@
 </template>
 
 <script setup>
+import Sidebar from "./Sidebar.vue";
+import Navbar from "./Navbar.vue";
 const props = defineProps({
     title: String,
 });
