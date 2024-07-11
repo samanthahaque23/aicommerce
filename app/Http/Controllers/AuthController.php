@@ -39,17 +39,17 @@ class AuthController extends Controller
 
     }
 
-    // public function logout()
-    // {
-    //     /** @var \App\Models\User $user */
-    //     $user = Auth::user();
-    //     $user->currentAccessToken()->delete();
+    public function logout()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
 
-    //     return response('', 204);
-    // }
+        return response('', 204);
+    }
 
-    // public function getUser(Request $request)
-    // {
-    //     return new UserResource($request->user());
-    // }
+    public function getUser(Request $request)
+    {
+        return new UserResource($request->user());
+    }
 }
