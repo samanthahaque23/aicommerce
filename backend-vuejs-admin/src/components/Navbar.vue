@@ -7,7 +7,7 @@
     <Menu as="div" class="relative inline-block text-left">
       <MenuButton class="flex items-center bg-white p-2 rounded hover:bg-gray-200 transition">
         <img src="https://randomuser.me/api/portraits/men/1.jpg" class="rounded-full w-8 mr-2">
-        <small class="text-gray-700">Good</small>
+        <small class="text-gray-700">{{currentUser.name}}</small>
         <ChevronDownIcon
           class="h-5 w-5 text-gray-700 hover:text-gray-500"
           aria-hidden="true"
@@ -74,14 +74,14 @@ import { computed } from "vue";
 
 const emit = defineEmits(['toggle-sidebar'])
 
-// const currentUser = computed(() => store.state.user.data);
+const currentUser = computed(() => store.state.user.data);
 
-// function logout() {
-//   store.dispatch('logout')
-//     .then(() => {
-//       router.push({ name: 'login' })
-//     })
-// }
+function logout() {
+  store.dispatch('logout')
+    .then(() => {
+      router.push({ name: 'login' })
+    })
+}
 </script>
 
 <style scoped>
