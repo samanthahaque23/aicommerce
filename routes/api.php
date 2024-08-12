@@ -1,8 +1,8 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\CorsMiddleware;
 
 /*
@@ -16,12 +16,14 @@ use App\Http\Middleware\CorsMiddleware;
 |
 */
 
-// Public route for login
-Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+// Public route for login with CORS middleware
+Route::middleware([CorsMiddleware::class])->group(function () {
+    Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
+});
 
-// Routes protected by Sanctum authentication and admin middleware
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::get('/user', [\App\Http\Controllers\AuthController::class, 'getUser']);
-    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+// Routes protected by Sanctum authentication, admin middleware, and CORS
+Route::middleware(['auth:sanctum', 'admin', CorsMiddleware::class])->group(function () {
+    Route::get('/user', [\App\Http\Controllers\Api\AuthController::class, 'getUser']);
+    Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
     Route::apiResource('/product', ProductController::class);
 });
