@@ -33,19 +33,72 @@
                 />
             </div>
         </div>
-        <Spinner v-if="products.loading" />
-        <template v-else>
             <table class="table-auto w-full">
                 <thead>
                     <tr>
-                        <th class="border-b-2 p-2 text-left">ID</th>
-                        <th class="border-b-2 p-2 text-left">Image</th>
-                        <th class="border-b-2 p-2 text-left">Title</th>
-                        <th class="border-b-2 p-2 text-left">Price</th>
-                        <th class="border-b-2 p-2 text-left">Last Updated</th>
+                        <TableHeaderCell
+                            field="id"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                            @click="sortProducts('id')"
+                        >
+                            ID
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                            field="image"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                        >
+                            Image
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                            field="title"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                            @click="sortProducts('title')"
+                        >
+                            Title
+                        </TableHeaderCell>
+                        <TableHeaderCell
+                            field="price"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                            @click="sortProducts('price')"
+                        >
+                            Price
+                        </TableHeaderCell>
+                        <!-- <TableHeaderCell
+                            field="quantity"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                            @click="sortProducts('quantity')"
+                        >
+                            Quantity
+                        </TableHeaderCell> -->
+                        <TableHeaderCell
+                            field="updated_at"
+                            :sort-field="sortField"
+                            :sort-direction="sortDirection"
+                            @click="sortProducts('updated_at')"
+                        >
+                            Last Updated At
+                        </TableHeaderCell>
+                        <!-- <TableHeaderCell field="actions">
+                            Actions
+                        </TableHeaderCell> -->
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="products.loading ">
+                    <tr>
+                        <td colspan="6">
+                            <Spinner v-if="products.loading" />
+                            <p v-else class="text-center py-8 text-gray-700">
+                                There are no products
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
                     <tr v-for="product of products.data">
                         <td class="border-b p-2">
                             {{ product.id }}
@@ -71,38 +124,42 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="flex justify-between items-center mt-5">
+            <div
+                v-if="!products.loading"
+                class="flex justify-between items-center mt-5"
+            >
                 <span>
                     Showing from {{ products.from }} to {{ products.to }}
                 </span>
                 <nav
-        v-if="products.total > products.limit"
-        class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
-        aria-label="Pagination"
-      >
-        <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-        <a
-          v-for="(link, i) of products.links"
-          :key="i"
-          :disabled="!link.url"
-          href="#"
-          @click.prevent="getForPage($event, link)"
-          aria-current="page"
-          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-          :class="[
-              link.active
-                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-              i === 0 ? 'rounded-l-md' : '',
-              i === products.links.length - 1 ? 'rounded-r-md' : '',
-              !link.url ? ' bg-gray-100 text-gray-700': ''
-            ]"
-          v-html="link.label"
-        >
-        </a>
-      </nav>
+                    v-if="products.total > products.limit"
+                    class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
+                    aria-label="Pagination"
+                >
+                    <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                    <a
+                        v-for="(link, i) of products.links"
+                        :key="i"
+                        :disabled="!link.url"
+                        href="#"
+                        @click.prevent="getForPage($event, link)"
+                        aria-current="page"
+                        class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+                        :class="[
+                            link.active
+                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                            i === 0 ? 'rounded-l-md' : '',
+                            i === products.links.length - 1
+                                ? 'rounded-r-md'
+                                : '',
+                            !link.url ? ' bg-gray-100 text-gray-700' : '',
+                        ]"
+                        v-html="link.label"
+                    >
+                    </a>
+                </nav>
             </div>
-        </template>
     </div>
 </template>
 
@@ -110,24 +167,47 @@
 import { computed, onMounted, ref } from "vue";
 import store from "../store/index.js";
 import { PRODUCTS_PER_PAGE } from "../constants.js";
-
+import TableHeaderCell from "../components/core/table/TableHeaderCell.vue";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");
 const products = computed(() => store.state.products);
+const sortField = ref("updated_at");
+const sortDirection = ref("desc");
 
 onMounted(() => {
     getProducts();
 });
 
-function getProducts(url = null ) {
-    store.dispatch("getProducts",{url});
+function getProducts(url = null) {
+    store.dispatch("getProducts", {
+        url,
+        search: search.value,
+        per_page: perPage.value,
+        sort_field: sortField.value,
+        sort_direction: sortDirection.value,
+    });
+}
+
+function sortProducts(field) {
+    if (field === sortField.value) {
+        if (sortDirection.value === "desc") {
+            sortDirection.value = "asc";
+        } else {
+            sortDirection.value = "desc";
+        }
+    } else {
+        sortField.value = field;
+        sortDirection.value = "asc";
+    }
+
+    getProducts();
 }
 function getForPage(ev, link) {
-  if (!link.url || link.active) {
-    return;
-  }
+    if (!link.url || link.active) {
+        return;
+    }
 
-  getProducts(link.url)
+    getProducts(link.url);
 }
 </script>

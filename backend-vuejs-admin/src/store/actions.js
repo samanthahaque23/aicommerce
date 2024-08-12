@@ -25,17 +25,40 @@ export function logout({ commit }) {
     });
 }
 
-export function getProducts({ commit }, { url = null }) {
-  commit('setProducts', [true]);
-
-  // Ensure the URL is correctly pointing to the Laravel API endpoint
-  url = url || '/product';
-
-  return axiosClient.get(url)
+export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
+  commit('setProducts', [true])
+  url = url || '/product'
+  
+  return axiosClient.get(url, {
+    params: {
+      
+      search, per_page:per_page, sort_field, sort_direction
+    }
+  })
     .then((response) => {
-      commit('setProducts', [false, response.data]);
+      commit('setProducts', [false, response.data])
     })
     .catch(() => {
-      commit('setProducts', [false]);
-    });
+      commit('setProducts', [false])
+    })
 }
+
+// export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
+//   commit('setProducts', [true])
+//   url = url || '/products'
+//   const params = {
+//     per_page: state.products.limit,
+//   }
+//   return axiosClient.get(url, {
+//     params: {
+//       ...params,
+//       search, per_page, sort_field, sort_direction
+//     }
+//   })
+//     .then((response) => {
+//       commit('setProducts', [false, response.data])
+//     })
+//     .catch(() => {
+//       commit('setProducts', [false])
+//     })
+// }
