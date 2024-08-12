@@ -25,15 +25,17 @@ export function logout({ commit }) {
     });
 }
 
-export function getProducts({ commit }) {
-  return axiosClient.get('/product')
-    .then(res => {
-      // Assuming you want to commit the products to the state
-      commit('setProducts', res.data); // Assuming you have a mutation to set products
-      return res.data;
+export function getProducts({ commit }, { url = null }) {
+  commit('setProducts', [true]);
+
+  // Ensure the URL is correctly pointing to the Laravel API endpoint
+  url = url || '/product';
+
+  return axiosClient.get(url)
+    .then((response) => {
+      commit('setProducts', [false, response.data]);
     })
-    .catch(error => {
-      console.error('Error fetching products:', error);
-      throw error; // Re-throw if you want the caller to handle it
+    .catch(() => {
+      commit('setProducts', [false]);
     });
 }
