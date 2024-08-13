@@ -25,5 +25,5 @@ Route::middleware([CorsMiddleware::class])->group(function () {
 Route::middleware(['auth:sanctum', 'admin', CorsMiddleware::class])->group(function () {
     Route::get('/user', [\App\Http\Controllers\Api\AuthController::class, 'getUser']);
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
-    Route::apiResource('/product', ProductController::class);
+    Route::apiResource('/products', ProductController::class);
 });

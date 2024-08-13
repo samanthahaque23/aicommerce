@@ -43,11 +43,25 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ProductRequest $request)
-    {
-        
+{
+    $data = $request->validated();
+    $data['created_by'] = $request->user()->id;
+    $data['updated_by'] = $request->user()->id;
 
-        return new ProductResource(Product::create($request->validated()));
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $relativePath = $this->saveImage($image);
+        $data['image'] = URL::to(Storage::url($relativePath));
+        $data['image_mime'] = $image->getClientMimeType();
+        $data['image_size'] = $image->getSize();
     }
+
+    $product = Product::create($data);
+
+    return new ProductResource($product);
+}
+
+
 
     /**
      * Display the specified resource.
@@ -69,12 +83,22 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        
-
-        $product->update($request->validated());
-
+        $data = $request->validated();
+        $data['updated_by'] = $request->user()->id;
+    
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $relativePath = $this->saveImage($image);
+            $data['image'] = URL::to(Storage::url($relativePath));
+            $data['image_mime'] = $image->getClientMimeType();
+            $data['image_size'] = $image->getSize();
+        }
+    
+        $product->update($data);
+    
         return new ProductResource($product);
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -91,6 +115,20 @@ class ProductController extends Controller
 
     private function saveImage(UploadedFile $image)
     {
-       
+        $path = 'images/' . Str::random();
+    
+        if (!Storage::exists($path)) {
+            Storage::makeDirectory($path, 0755, true);
+        }
+    
+        // Attempt to save the file
+        $savedPath = Storage::putFileAs('public/' . $path, $image, $image->getClientOriginalName());
+    
+        if (!$savedPath) {
+            throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
+        }
+    
+        return $path . '/' . $image->getClientOriginalName();
     }
+    
 }

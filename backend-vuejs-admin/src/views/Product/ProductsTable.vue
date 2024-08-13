@@ -1,14 +1,5 @@
 <template>
-    <div class="flex items-center justify-between mb-3 ml-10">
-        <h1 class="text-3xl text-black font-semibold">Products</h1>
-        <button
-            type="submit"
-            class="flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white blue-indigo-600 hover"
-        >
-            Add new product
-        </button>
-    </div>
-    <div class="bg-white text-black p-4 rounded shadow ml-10">
+     <div class="bg-white text-black p-4 rounded shadow ml-10">
         <div class="flex justify-between border-b-2 pb-3">
             <div class="flex items-center">
                 <span class="whitespace-nowrap mr-3"> Per Page </span>
@@ -165,9 +156,9 @@
 
 <script setup >
 import { computed, onMounted, ref } from "vue";
-import store from "../store/index.js";
-import { PRODUCTS_PER_PAGE } from "../constants.js";
-import TableHeaderCell from "../components/core/table/TableHeaderCell.vue";
+import store from "../../store/index.js";
+import { PRODUCTS_PER_PAGE } from "../../constants.js";
+import TableHeaderCell from "../../components/core/table/TableHeaderCell.vue";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");
