@@ -1,5 +1,3 @@
-<?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,15 +22,10 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'max:2000'],
-            'images.*' => ['nullable', 'image'],
-            'deleted_images.*' => ['nullable', 'int'],
-            'image_positions.*' => ['nullable', 'int'],
-            'categories.*' => ['nullable', 'int', 'exists:categories,id'],
-            'price' => ['required', 'numeric', 'min:0.01'],
-            'quantity' => ['nullable', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'published' => ['required', 'boolean']
+            'title' => ['required', 'max:255'], // Adjusted title length
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'], // Image validation with size and format limits
+            'price' => ['required', 'numeric', 'min:0'], // Ensures price is numeric and non-negative
+            'description' => ['nullable', 'string', 'max:5000'], // Description can have a max length of 5000
         ];
     }
 }

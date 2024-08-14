@@ -65,13 +65,15 @@ export function updateProduct({commit}, product) {
     form.append('price', product.price);
     form.append('_method', 'PUT');
     product = form;
+  }else{
+    product._method = 'PUT'
   }
   return axiosClient.post(`/products/${id}`, product)
 }
 
-export function deleteProduct({commit}, id) {
-  return axiosClient.delete(`/products/${id}`)
-}
+// export function deleteProduct({commit}, id) {
+//   return axiosClient.delete(`/products/${id}`)
+// }
 // export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
 //   commit('setProducts', [true])
 //   url = url || '/products'
