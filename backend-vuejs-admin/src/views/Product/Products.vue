@@ -10,12 +10,13 @@
         </button>
     </div>
     <ProductModal v-model:modalValue="showModal" :product="productModel" />
-    <ProductTable />
+    <ProductTable @clickEdit="editProduct" />
 </template>
 
 <script setup>
 import ProductTable from "./ProductsTable.vue";
 import ProductModal from "./ProductModal.vue";
+import store from "../../store/index.js";
 import { ref } from "vue";
 
 const showModal = ref(false);
@@ -27,10 +28,20 @@ const DEFAULT_PRODUCT = {
     image: "",
     price: "",
 };
+    const productModel = ref({ ...DEFAULT_PRODUCT });
 
-const productModel = ref({ ...DEFAULT_PRODUCT });
+function editProduct(p) {
+    store.dispatch("getProduct", p.id).then(({ data }) => {
+        productModel.value = data;
+        showProductModal();
+    });
+}
+
 function showProductModal() {
     showModal.value = true;
+}
+function onModalClose() {
+  productModel.value = {...DEFAULT_PRODUCT}
 }
 </script>
 

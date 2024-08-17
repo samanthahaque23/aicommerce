@@ -42,6 +42,9 @@ export function getProducts({commit, state}, {url = null, search = '', per_page,
       commit('setProducts', [false])
     })
 }
+export function getProduct({commit}, id) {
+  return axiosClient.get(`/products/${id}`)
+}
 export function  createProduct({commit}, product) {
   if (product.image instanceof File) {
     const form = new FormData();
@@ -71,9 +74,9 @@ export function updateProduct({commit}, product) {
   return axiosClient.post(`/products/${id}`, product)
 }
 
-// export function deleteProduct({commit}, id) {
-//   return axiosClient.delete(`/products/${id}`)
-// }
+export function deleteProduct({commit}, id) {
+  return axiosClient.delete(`/products/${id}`)
+}
 // export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
 //   commit('setProducts', [true])
 //   url = url || '/products'
