@@ -6,7 +6,9 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@tailwindcss/forms": "^0.5.2",
+        "@alpinejs/collapse": "^3.14.1",
+        "@alpinejs/persist": "^3.14.1",
+        "@tailwindcss/forms": "^0.5.7",
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
         "axios": "^1.7.2",
@@ -17,6 +19,7 @@
     },
     "dependencies": {
         "@heroicons/vue": "^1.0.6",
+        "@tailwindcss/aspect-ratio": "^0.4.2",
         "vuex": "^4.0.2"
     }
 }
