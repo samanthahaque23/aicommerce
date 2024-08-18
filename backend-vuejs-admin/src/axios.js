@@ -16,8 +16,8 @@ axiosClient.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      sessionStorage.removeItem('TOKEN');
-      router.push({ name: 'login' });
+      store.commit('setToken', null)
+      router.push({name: 'login'})
     } else if (error.response.status === 500) {
       console.error('Server error:', error.response.data); // Log the server error details
     }
