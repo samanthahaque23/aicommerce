@@ -1,6 +1,7 @@
 <x-app-layout>
     <div class="container mx-auto">
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
+            <!-- Image Section -->
             <div class="lg:col-span-3">
                 <div
                     x-data="{
@@ -27,11 +28,12 @@
                         <template x-for="image in images">
                             <div
                                 x-show="activeImage === image"
-                                class="aspect-w-3 aspect-h-2"
+                                class="aspect-w-1 aspect-h-1 max-w-md mx-auto"
                             >
-                                <img :src="image" alt="" class="w-auto mx-auto"/>
+                                <img :src="image" alt="" class="w-full h-auto object-cover rounded-lg"/>
                             </div>
                         </template>
+                        <!-- Navigation Arrows -->
                         <a
                             @click.prevent="prev"
                             class="cursor-pointer bg-black/30 text-white absolute left-0 top-1/2 -translate-y-1/2"
@@ -71,19 +73,22 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="flex">
+                    <!-- Thumbnail Image List -->
+                    <div class="flex mt-4 space-x-2 justify-center">
                         <template x-for="image in images">
                             <a
                                 @click.prevent="activeImage = image"
-                                class="cursor-pointer w-[80px] h-[80px] border border-gray-300 hover:border-purple-500 flex items-center justify-center"
+                                class="cursor-pointer w-20 h-20 border border-gray-300 hover:border-purple-500 flex items-center justify-center"
                                 :class="{'border-purple-600': activeImage === image}"
                             >
-                                <img :src="image" alt="" class="w-auto max-auto max-h-full"/>
+                                <img :src="image" alt="" class="object-cover w-full h-full rounded-lg"/>
                             </a>
                         </template>
                     </div>
                 </div>
             </div>
+
+            <!-- Product Details Section -->
             <div class="lg:col-span-2">
                 <h1 class="text-lg font-semibold">
                     {{$product->title}}
