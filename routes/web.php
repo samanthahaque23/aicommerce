@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 // Home page route
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
+// Route for top-loved products
+Route::get('/top_loved', [ProductController::class, 'showTopLoved'])->name('product.top_loved');
+
 // Route to show the recommendation form (GET)
 Route::get('/recommend', [ProductController::class, 'showRecommendationForm'])->name('product.recommend_form');
 
