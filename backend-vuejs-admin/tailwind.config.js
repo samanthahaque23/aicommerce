@@ -4,8 +4,13 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        palevioletred: '#DB7093',
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),

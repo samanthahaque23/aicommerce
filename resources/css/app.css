@@ -59,3 +59,64 @@ body {
 .table-sm>thead>tr>th {
   padding: 0.25rem;
 }
+/* Ensure the swiper container doesn't overflow */
+.swiper-container {
+  position: relative; /* This makes the navigation buttons positioned relative to this container */
+  overflow: hidden;   /* Hide any overflow to prevent horizontal scrollbar */
+}
+
+/* Hero Slider Specific Styles */
+.hero-slider {
+  height: 500px;
+  position: relative;
+}
+
+/* Ensure that only one slide is visible at a time */
+.hero-slider .swiper-slide {
+  display: flex;
+  visibility: hidden; /* Hide the slide initially */
+  opacity: 0;         /* Make the slide transparent initially */
+  transition: visibility 0s, opacity 0.5s ease-in-out; /* Smooth transition */
+}
+
+.hero-slider .swiper-slide-active {
+  visibility: visible; /* Make the active slide visible */
+  opacity: 1;          /* Fade the active slide in */
+}
+
+/* Hero Slider Image */
+.hero-slider .swiper-slide img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+/* Navigation button styles */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  color: #000 !important; /* Change arrow color to black */
+  width: 30px; /* Make the arrows smaller */
+  height: 30px; /* Match the width */
+  background: transparent; /* Remove background (if not needed) */
+  border-radius: 50%; /* Keep the circular shape (optional) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10; /* Ensure the buttons are above the slides */
+  top: 50%;    /* Center the buttons vertically */
+  transform: translateY(-50%); /* Adjust for perfect vertical centering */
+  position: absolute; /* Absolutely position relative to swiper-container */
+}
+
+.swiper-button-next {
+  right: 10px; /* Adjust this value to fit your layout */
+}
+
+.swiper-button-prev {
+  left: 10px; /* Adjust this value to fit your layout */
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(0, 0, 0, 0.1); /* Light hover background */
+}
