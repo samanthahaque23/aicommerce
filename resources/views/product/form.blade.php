@@ -1,84 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Recommendation Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Styling for compact cards */
-        .card-body {
-           
-            overflow: auto; /* Enable scroll if content is too long */
-            max-height: 200px; /* Set a maximum height for card content */
-        }
-        .card {
-            margin-bottom: 20px;
-            height: 350px; /* Set a fixed height for the card */
-        }
-        .card img {
-            height: 150px; /* Adjust image height */
-            object-fit: cover; /* Ensure the image covers the space */
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <!-- Form should always be displayed -->
-        <h1>Get Product Recommendations</h1>
-
-        <!-- Form for product recommendations -->
-        <form action="{{ route('product.recommend') }}" method="POST" class="mb-5">
-            @csrf
-            <div class="mb-3">
-                <label for="product_name" class="form-label">Product Name</label>
-                <input type="text" name="product_name" class="form-control" id="product_name" placeholder="Enter product name (optional)">
-            </div>
-            <div class="mb-3">
-                <label for="skin_type" class="form-label">Skin Type</label>
-                <input type="text" name="skin_type" class="form-control" id="skin_type" placeholder="Enter skin type">
-            </div>
-            <div class="mb-3">
-                <label for="secondary_category" class="form-label">Secondary Category</label>
-                <input type="text" name="secondary_category" class="form-control" id="secondary_category" placeholder="Enter secondary category">
-            </div>
-            <button type="submit" class="btn btn-primary">Get Recommendations</button>
-        </form>
-
-        <!-- Recommendations will be displayed below the form, but form stays visible -->
-        @if(isset($products) && count($products) > 0)
-            <h2>Recommended Products</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                @foreach($products as $product)
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Image">
-                            <div class="card-body">
-                                <!-- Display Product Name -->
-                                <h6 class="card-title">{{ $product[0] }}</h6>
-                                
-                                <!-- Display Ingredients, wrapping text if necessary -->
-                                {{-- <p class="card-text">
-                                    Ingredients: {{ trim(preg_replace('/[\r\n]+/', ' ', strip_tags($product[1]))) }}
-                                </p> --}}
-
-                                <!-- Display Skin Type (handling array) -->
-                                <p class="card-text">
-                                    Skin Type: {{ is_array($product[2]) ? implode(', ', $product[2]) : $product[2] }}
-                                </p>
-                            </div>
-                        </div>
+<x-app-layout>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Recommendation Form</title>
+        <!-- Tailwind CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+            /* Custom styles */
+            .card-body {
+                overflow: auto; /* Enable scroll if content is too long */
+                max-height: 200px; /* Set a maximum height for card content */
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100">
+        <div class="container mx-auto mt-10 px-4">
+            <!-- Form Section -->
+            <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+                <h1 class="text-2xl font-bold mb-6">Get Product Recommendations</h1>
+                
+                <!-- Form for product recommendations -->
+                <form action="{{ route('product.recommend') }}" method="POST" class="space-y-6">
+                    @csrf
+                    <div>
+                        <label for="product_name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                        <input type="text" name="product_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" id="product_name" placeholder="Enter product name (optional)">
                     </div>
-                @endforeach
+                    <div>
+                        <label for="skin_type" class="block text-sm font-medium text-gray-700">Skin Type</label>
+                        <input type="text" name="skin_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" id="skin_type" placeholder="Enter skin type">
+                    </div>
+                    <div>
+                        <label for="secondary_category" class="block text-sm font-medium text-gray-700">Secondary Category</label>
+                        <input type="text" name="secondary_category" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" id="secondary_category" placeholder="Enter secondary category">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Get Recommendations</button>
+                </form>
             </div>
-        @elseif(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-    </div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+            <!-- Recommendations Section -->
+            @if(isset($products) && count($products) > 0)
+                <div>
+                    <h2 class="text-xl font-semibold mb-6">Recommended Products</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        @foreach($products as $product)
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+                                <img src="https://via.placeholder.com/150" alt="Product Image" class="w-full h-40 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold mb-2">{{ $product[0] }}</h3>
+                                    <!-- Display Skin Type -->
+                                    <p class="text-sm text-gray-600">
+                                        Skin Type: {{ is_array($product[2]) ? implode(', ', $product[2]) : $product[2] }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @elseif(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+        </div>
+    </body>
+    </html>
+</x-app-layout>

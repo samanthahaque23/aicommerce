@@ -1,41 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Recommendations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Recommended Products</h1>
-        <div class="row">
-            @if(isset($products) && count($products) > 0)
-                @foreach($products as $product)
-                    <div class="col-md-3">
-                        <div class="card" style="width: 18rem;">
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Image">
-                            <div class="card-body">
+<x-app-layout>
+  
+    <section class="bg-gray-100">
+        <div class="container mx-auto mt-10 px-4">
+            <h1 class="text-4xl font-bold mb-6 text-pink-700">Recommended Products</h1>
+            <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                @if(isset($products) && count($products) > 0)
+                    @foreach($products as $product)
+                        <div class="border border-gray-200 rounded-lg bg-white shadow-md overflow-hidden">
+                            <img src="https://via.placeholder.com/150" alt="Product Image" class="object-cover w-full h-48">
+                            <div class="p-4">
                                 <!-- Product Name -->
-                                <h5 class="card-title">{{ $product[0] }}</h5>
+                                <h5 class="text-lg font-semibold mb-2">{{ $product[0] }}</h5>
                                 
                                 <!-- Ingredients (cleaning up newlines and array-like string) -->
-                                <p class="card-text">
+                                <p class="text-gray-700 mb-2">
                                     Ingredients: {{ trim(preg_replace('/[\r\n]+/', ' ', strip_tags($product[1]))) }}
                                 </p>
-
+    
                                 <!-- Skin Type (implode array into a string) -->
-                                <p class="card-text">
+                                <p class="text-gray-700">
                                     Skin Type: {{ is_array($product[2]) ? implode(', ', $product[2]) : $product[2] }}
                                 </p>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            @else
-                <p>No recommendations found.</p>
-            @endif
+                    @endforeach
+                @else
+                    <p class="text-gray-700">No recommendations found.</p>
+                @endif
+            </div>
         </div>
-    </div>
-</body>
-</html>
+    </section>
+   
+    </x-app-layout>
+    
