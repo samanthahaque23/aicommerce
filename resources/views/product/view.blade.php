@@ -3,6 +3,7 @@
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
             <!-- Image Section -->
             <div class="lg:col-span-3">
+                <!-- Product Image Carousel (Existing code) -->
                 <div
                     x-data="{
                         images: ['{{$product->image}}'],
@@ -78,8 +79,8 @@
                         <template x-for="image in images">
                             <a
                                 @click.prevent="activeImage = image"
-                                class="cursor-pointer w-20 h-20 border border-gray-300 hover:border-pink-500 flex items-center justify-center rounded-lg"
-                                :class="{'border-pink-600': activeImage === image}"
+                                class="cursor-pointer w-20 h-20 border border-gray-300 hover:border-yellow-500 flex items-center justify-center rounded-lg"
+                                :class="{'border-yellow-500': activeImage === image}"
                             >
                                 <img :src="image" alt="Thumbnail Image" class="object-cover w-full h-full rounded-lg"/>
                             </a>
@@ -103,12 +104,12 @@
                         name="quantity"
                         x-ref="quantityEl"
                         value="1"
-                        class="w-32 border border-gray-300 rounded px-2 py-1 focus:border-pink-500 focus:outline-none"
+                        class="w-32 border border-gray-300 rounded px-2 py-1 focus:border-yellow-500 focus:outline-none"
                     />
                 </div>
                 <button
                     @click="addToCart(id, $refs.quantityEl.value)"
-                    class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6 bg-pink-600 text-white hover:bg-pink-700"
+                    class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6 bg-yellow-500 text-white hover:bg-pink-700"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -138,20 +139,31 @@
                         <a
                             @click="expanded = !expanded"
                             href="javascript:void(0)"
-                            class="text-pink-500 hover:text-pink-700"
+                            class="text-yellow-500 hover:text-pink-700"
                             x-text="expanded ? 'Read Less' : 'Read More'"
                         ></a>
                     </p>
                 </div>
 
                 <!-- QR Code Section -->
+                <!-- QR Code Section -->
                 <div class="mt-6">
                     <h3 class="text-lg font-semibold mb-2">Scan this QR code to view the product:</h3>
                     <div class="mt-2">
-                        {!! $qrCode !!}
+                        <!-- Display the QR code image -->
+                        <img src="{{ $qrCodeUrl }}" alt="QR Code" class="w-48 h-48"/>
                     </div>
+                    <!-- Download QR Code as PNG -->
+                    @if($qrCodeUrl)
+                        <a
+                            href="{{ $qrCodeUrl }}"
+                            download="product-qr-code.png"
+                            class="btn-primary mt-4 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+                        >
+                            Download QR Code
+                        </a>
+                    @endif
                 </div>
-
                 {{-- <!-- Description Button -->
                 <div class="mt-4">
                     <a

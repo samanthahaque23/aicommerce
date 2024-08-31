@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
     {
         // Fetch the regular products from the database
         $products = Product::query()->orderBy('updated_at', 'desc')->paginate(8);
-
+        $heroProducts = $products->take(5);
         // Fetch top-loved products from the Flask API
         $topLovedResponse = Http::get('http://127.0.0.1:5000/api/top_loved_products');
 
@@ -33,6 +34,7 @@ class ProductController extends Controller
         // Return the view with both regular products and top-loved products
         return view('product.index', [
             'products' => $products,
+            'heroProducts' => $heroProducts,
             'topLovedProducts' => $topLovedProducts // Pass top-loved products to the view
         ]);
     }
@@ -42,12 +44,18 @@ class ProductController extends Controller
     {
         // Generate the QR code URL for the product
         $url = route('product.description', $product->slug); // Updated route to description
-        $qrCode = QrCode::size(200)->generate($url);
+        
+        // Generate QR Code using SimpleSoftwareIO\QrCode with GD
+        $qrCodeImage = QrCode::format('png')->size(200)->generate($url);
 
-        // Return the view with the product and QR code
+        // Save QR Code to a file in the public storage directory
+        $filePath = 'qrcodes/' . $product->slug . '.png';
+        Storage::disk('public')->put($filePath, $qrCodeImage);
+
+        // Return the view with the product and QR code URL
         return view('product.view', [
             'product' => $product,
-            'qrCode' => $qrCode
+            'qrCodeUrl' => asset('storage/' . $filePath) // Provide the URL for downloading
         ]);
     }
 

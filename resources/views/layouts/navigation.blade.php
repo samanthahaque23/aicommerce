@@ -2,7 +2,7 @@
     x-data="{mobileMenuOpen: false}"
     class="flex justify-between bg-black shadow-md text-white"
 >
-    <div class="px-10 text-pink-700" style="font-size: 50px;font-weight:900;display:flex;align-items:center;">
+    <div class="px-10 text-yellow-500" style="font-size: 50px;font-weight:900;display:flex;align-items:center;">
     AIC 
     </div>
     <!-- Responsive Menu -->
@@ -210,7 +210,7 @@
                 <li class="px-3 py-3">
                     <a
                         href="{{ route('register') }}"
-                        class="block text-center text-white bg-pink-700 py-2 px-3 rounded shadow-md hover:bg-pink-700 active:bg-pink-800 transition-colors w-full"
+                        class="block text-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-500 active:bg-yellow-800 transition-colors w-full"
                     >
                         Register now
                     </a>
@@ -422,7 +422,7 @@
                 <li>
                     <a
                         href="{{ route('register') }}"
-                        class="inline-flex items-center text-white bg-pink-700 py-2 px-3 rounded shadow-md hover:bg-pink-500 active:bg-pink-800 transition-colors mx-5"
+                        class="inline-flex items-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-500 active:bg-yellow-800 transition-colors mx-5"
                     >
                         Register now
                     </a>
