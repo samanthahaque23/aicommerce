@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ProductController extends Controller
 {
@@ -39,7 +40,25 @@ class ProductController extends Controller
     // Display a single product
     public function view(Product $product)
     {
-        return view('product.view', ['product' => $product]);
+        // Generate the QR code URL for the product
+        $url = route('product.description', $product->slug); // Updated route to description
+        $qrCode = QrCode::size(200)->generate($url);
+
+        // Return the view with the product and QR code
+        return view('product.view', [
+            'product' => $product,
+            'qrCode' => $qrCode
+        ]);
+    }
+
+    // Method to show the product description
+    public function showDescription($slug)
+    {
+        // Retrieve the product based on the slug
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        // Return a view with the product description
+        return view('product.description', compact('product'));
     }
 
     // New method to handle the route for top-loved products only
@@ -65,6 +84,7 @@ class ProductController extends Controller
             'topLovedProducts' => $topLovedProducts // Pass top-loved products to the view
         ]);
     }
+
     // Show the recommendation form (GET request)
     public function showRecommendationForm()
     {
@@ -89,5 +109,4 @@ class ProductController extends Controller
             return view('product.form')->with('error', 'Failed to retrieve recommendations');
         }
     }
-    
 }

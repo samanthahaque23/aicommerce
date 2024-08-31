@@ -1,28 +1,26 @@
 <x-app-layout>
-    <div class="container mx-auto">
+    <div class="container mx-auto p-6">
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
             <!-- Image Section -->
             <div class="lg:col-span-3">
                 <div
                     x-data="{
-  images: ['{{$product->image}}'],
-  activeImage: null,
-  prev() {
-      let index = this.images.indexOf(this.activeImage);
-      if (index === 0)
-          index = this.images.length;
-      this.activeImage = this.images[index - 1];
-  },
-  next() {
-      let index = this.images.indexOf(this.activeImage);
-      if (index === this.images.length - 1)
-          index = -1;
-      this.activeImage = this.images[index + 1];
-  },
-  init() {
-      this.activeImage = this.images.length > 0 ? this.images[0] : null
-  }
-}"
+                        images: ['{{$product->image}}'],
+                        activeImage: null,
+                        prev() {
+                            let index = this.images.indexOf(this.activeImage);
+                            if (index === 0) index = this.images.length;
+                            this.activeImage = this.images[index - 1];
+                        },
+                        next() {
+                            let index = this.images.indexOf(this.activeImage);
+                            if (index === this.images.length - 1) index = -1;
+                            this.activeImage = this.images[index + 1];
+                        },
+                        init() {
+                            this.activeImage = this.images.length > 0 ? this.images[0] : null;
+                        }
+                    }"
                 >
                     <div class="relative">
                         <template x-for="image in images">
@@ -30,13 +28,14 @@
                                 x-show="activeImage === image"
                                 class="aspect-w-1 aspect-h-1 max-w-md mx-auto"
                             >
-                                <img :src="image" alt="" class="w-full h-auto object-cover rounded-lg"/>
+                                <img :src="image" alt="Product Image" class="w-full h-auto object-cover rounded-lg"/>
                             </div>
                         </template>
                         <!-- Navigation Arrows -->
                         <a
                             @click.prevent="prev"
-                            class="cursor-pointer bg-black/30 text-white absolute left-0 top-1/2 -translate-y-1/2"
+                            class="cursor-pointer bg-black/30 text-white absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full"
+                            style="transform: translateY(-50%);"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +54,8 @@
                         </a>
                         <a
                             @click.prevent="next"
-                            class="cursor-pointer bg-black/30 text-white absolute right-0 top-1/2 -translate-y-1/2"
+                            class="cursor-pointer bg-black/30 text-white absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full"
+                            style="transform: translateY(-50%);"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -78,10 +78,10 @@
                         <template x-for="image in images">
                             <a
                                 @click.prevent="activeImage = image"
-                                class="cursor-pointer w-20 h-20 border border-gray-300 hover:border-purple-500 flex items-center justify-center"
-                                :class="{'border-purple-600': activeImage === image}"
+                                class="cursor-pointer w-20 h-20 border border-gray-300 hover:border-pink-500 flex items-center justify-center rounded-lg"
+                                :class="{'border-pink-600': activeImage === image}"
                             >
-                                <img :src="image" alt="" class="object-cover w-full h-full rounded-lg"/>
+                                <img :src="image" alt="Thumbnail Image" class="object-cover w-full h-full rounded-lg"/>
                             </a>
                         </template>
                     </div>
@@ -90,7 +90,7 @@
 
             <!-- Product Details Section -->
             <div class="lg:col-span-2">
-                <h1 class="text-lg font-semibold">
+                <h1 class="text-2xl font-semibold mb-4">
                     {{$product->title}}
                 </h1>
                 <div class="text-xl font-bold mb-6">${{$product->price}}</div>
@@ -103,12 +103,12 @@
                         name="quantity"
                         x-ref="quantityEl"
                         value="1"
-                        class="w-32 focus:border-purple-500 focus:outline-none rounded"
+                        class="w-32 border border-gray-300 rounded px-2 py-1 focus:border-pink-500 focus:outline-none"
                     />
                 </div>
                 <button
                     @click="addToCart(id, $refs.quantityEl.value)"
-                    class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6"
+                    class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6 bg-pink-600 text-white hover:bg-pink-700"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -138,11 +138,29 @@
                         <a
                             @click="expanded = !expanded"
                             href="javascript:void(0)"
-                            class="text-purple-500 hover:text-purple-700"
+                            class="text-pink-500 hover:text-pink-700"
                             x-text="expanded ? 'Read Less' : 'Read More'"
                         ></a>
                     </p>
                 </div>
+
+                <!-- QR Code Section -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold mb-2">Scan this QR code to view the product:</h3>
+                    <div class="mt-2">
+                        {!! $qrCode !!}
+                    </div>
+                </div>
+
+                {{-- <!-- Description Button -->
+                <div class="mt-4">
+                    <a
+                        href="{{ route('product.description', $product->slug) }}"
+                        class="btn-primary bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 rounded"
+                    >
+                        View Full Description
+                    </a>
+                </div> --}}
             </div>
         </div>
     </div>

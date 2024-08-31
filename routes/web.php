@@ -18,7 +18,7 @@ Route::post('/recommend', [ProductController::class, 'getRecommendations'])->nam
 
 // Route for viewing a single product
 Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
-
+Route::get('/product/{slug}/description', [ProductController::class, 'showDescription'])->name('product.description');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
