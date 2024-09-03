@@ -17,12 +17,12 @@
                         
                         <!-- Overlay Content on the right -->
                         <div class="w-1/2 h-full text-white flex flex-col justify-center p-10">
-                            <h2 class="text-4xl font-bold mb-2">{{ $product->title }}</h2>
+                            <p class=" mb-2" style="font-size: 50px;font-weight:700;text-tranform:capitalize">{{ $product->title }}</p>
                             {{-- <h3 class="text-2xl mb-4">{{ $product->brand_name ?? 'Brand Name' }}</h3> --}}
                             
                             <!-- Check if the slug exists before using it in the link -->
                             @if($product->slug)
-                                <a href="{{ route('product.view', $product->slug) }}" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-purple-800 transition-all">
+                                <a href="{{ route('product.view', $product->slug) }}" style="width:400px;height:70px;font-size:30px;text-align:center;font-weight:700" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-reds-800 transition-all">
                                     Shop Now
                                 </a>
                             @else
