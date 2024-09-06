@@ -3,7 +3,7 @@
     class="flex justify-between bg-black shadow-md text-white"
 >
     <div class="px-10 text-yellow-500" style="font-size: 50px;font-weight:900;display:flex;align-items:center;">
-    AIC 
+    Know Your Food
     </div>
     <!-- Responsive Menu -->
     <div
