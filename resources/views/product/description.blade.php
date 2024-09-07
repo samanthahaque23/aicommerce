@@ -3,12 +3,31 @@
         <h1 class="text-2xl font-semibold mb-4">
             {{ $product->title }}
         </h1>
-        <div class="text-xl mb-6">
-            <strong>Price:</strong> ${{ $product->price }}
+        
+        <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+            <h1 class="text-bold text-lg font-medium mb-2">Allergens</h1>
+            {{-- <div class="text-gray-700 mb-4">
+                {!! $product->description !!}
+            </div> --}}
+
+            @php
+                // Assuming the allergens are listed in the description separated by commas
+                $allergens = explode(',', strip_tags($product->description));
+            @endphp
+
+            @if(count($allergens) > 1)
+                <div class="flex flex-wrap gap-2">
+                    @foreach($allergens as $allergen)
+                        @if(trim($allergen) !== '') <!-- Avoid empty buttons -->
+                            <button class="bg-gray-200 text-gray-800 py-1 px-3 rounded-lg text-sm">
+                                {{ trim($allergen) }}
+                            </button>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
         </div>
-        <div class="text-gray-700 mb-6">
-            {!! $product->description !!}
-        </div>
+
         <a href="{{ route('product.view', $product->slug) }}" class="text-purple-500 hover:text-purple-700">
             Go Back to Product Page
         </a>

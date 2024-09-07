@@ -60,7 +60,7 @@
                 <div class="bg-white px-4 pt-5 pb-4">
                   <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
                   <CustomInput type="file" class="mb-2" label="Product Image" @change="file => product.image = file"/>
-                  <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description"/>
+                  <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Allergen(separate with comma)"/>
                   <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$"/>
                 </div>
                 <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

@@ -91,43 +91,11 @@
 
             <!-- Product Details Section -->
             <div class="lg:col-span-2">
-                <h1 class="text-2xl font-semibold mb-4">
+                <h1 class="text-4xl font-semibold mb-4" style="text-transform: capitalize">
                     {{$product->title}}
                 </h1>
-                <div class="text-xl font-bold mb-6">${{$product->price}}</div>
-                <div class="flex items-center justify-between mb-5">
-                    <label for="quantity" class="block font-bold mr-4">
-                        Quantity
-                    </label>
-                    <input
-                        type="number"
-                        name="quantity"
-                        x-ref="quantityEl"
-                        value="1"
-                        class="w-32 border border-gray-300 rounded px-2 py-1 focus:border-yellow-500 focus:outline-none"
-                    />
-                </div>
-                <button
-                    @click="addToCart(id, $refs.quantityEl.value)"
-                    class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6 bg-yellow-500 text-white hover:bg-pink-700"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                    </svg>
-                    Add to Cart
-                </button>
-                <div class="mb-6" x-data="{expanded: false}">
+            
+                {{-- <div class="mb-6" x-data="{expanded: false}">
                     <div
                         x-show="expanded"
                         x-collapse.min.120px
@@ -143,7 +111,7 @@
                             x-text="expanded ? 'Read Less' : 'Read More'"
                         ></a>
                     </p>
-                </div>
+                </div> --}}
 
                 <!-- QR Code Section -->
                 <!-- QR Code Section -->

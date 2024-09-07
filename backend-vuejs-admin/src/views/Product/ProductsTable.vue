@@ -58,14 +58,7 @@
                     >
                         Price
                     </TableHeaderCell>
-                    <!-- <TableHeaderCell
-                            field="quantity"
-                            :sort-field="sortField"
-                            :sort-direction="sortDirection"
-                            @click="sortProducts('quantity')"
-                        >
-                            Quantity
-                        </TableHeaderCell> -->
+               
                     <TableHeaderCell
                         field="updated_at"
                         :sort-field="sortField"
