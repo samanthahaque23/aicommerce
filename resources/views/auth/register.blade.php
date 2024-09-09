@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-guest-layout>
     <form
         action="{{ route('register') }}"
         method="post"
@@ -39,4 +39,4 @@
             Signup
         </button>
     </form>
-</x-app-layout>
+</x-guest-layout>
