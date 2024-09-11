@@ -1,38 +1,41 @@
 import axiosClient from "../axios";
 
-export function getUser({ commit }, data) {
+export function getUser({commit}, data) {
   return axiosClient.get('/user', data)
-    .then(({ data }) => {
+    .then(({data}) => {
       commit('setUser', data);
       return data;
-    });
+    })
 }
 
-export function login({ commit }, data) {
+export function login({commit}, data) {
   return axiosClient.post('/login', data)
-    .then(({ data }) => {
+    .then(({data}) => {
       commit('setUser', data.user);
-      commit('setToken', data.token);
+      commit('setToken', data.token)
       return data;
-    });
+    })
 }
 
-export function logout({ commit }) {
+export function logout({commit}) {
   return axiosClient.post('/logout')
     .then((response) => {
-      commit('setToken', null);
+      commit('setToken', null)
+
       return response;
-    });
+    })
 }
 
 export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
   commit('setProducts', [true])
   url = url || '/products'
-  
+  const params = {
+    per_page: state.products.limit,
+  }
   return axiosClient.get(url, {
     params: {
-      
-      search, per_page:per_page, sort_field, sort_direction
+      ...params,
+      search, per_page, sort_field, sort_direction
     }
   })
     .then((response) => {
@@ -42,10 +45,12 @@ export function getProducts({commit, state}, {url = null, search = '', per_page,
       commit('setProducts', [false])
     })
 }
+
 export function getProduct({commit}, id) {
   return axiosClient.get(`/products/${id}`)
 }
-export function  createProduct({commit}, product) {
+
+export function createProduct({commit}, product) {
   if (product.image instanceof File) {
     const form = new FormData();
     form.append('title', product.title);
@@ -68,7 +73,7 @@ export function updateProduct({commit}, product) {
     form.append('price', product.price);
     form.append('_method', 'PUT');
     product = form;
-  }else{
+  } else {
     product._method = 'PUT'
   }
   return axiosClient.post(`/products/${id}`, product)
@@ -77,22 +82,3 @@ export function updateProduct({commit}, product) {
 export function deleteProduct({commit}, id) {
   return axiosClient.delete(`/products/${id}`)
 }
-// export function getProducts({commit, state}, {url = null, search = '', per_page, sort_field, sort_direction} = {}) {
-//   commit('setProducts', [true])
-//   url = url || '/products'
-//   const params = {
-//     per_page: state.products.limit,
-//   }
-//   return axiosClient.get(url, {
-//     params: {
-//       ...params,
-//       search, per_page, sort_field, sort_direction
-//     }
-//   })
-//     .then((response) => {
-//       commit('setProducts', [false, response.data])
-//     })
-//     .catch(() => {
-//       commit('setProducts', [false])
-//     })
-// }
