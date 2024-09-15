@@ -19,7 +19,8 @@ class CheckoutController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
 
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        // Set API key for Stripe using Laravel configuration
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         [$products, $cartItems] = Cart::getProductsAndCartItems();
 
@@ -34,7 +35,7 @@ class CheckoutController extends Controller
                     'currency' => 'usd',
                     'product_data' => [
                         'name' => $product->title,
-//                        'images' => [$product->image]
+                        // 'images' => [$product->image]
                     ],
                     'unit_amount' => $product->price * 100,
                 ],
@@ -46,15 +47,16 @@ class CheckoutController extends Controller
                 'unit_price' => $product->price
             ];
         }
-//        dd(route('checkout.failure', [], true));
 
-//        dd(route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}');
+        // Retrieve the customer ID if available
+        $customer_id = $user->stripe_customer_id ?? null;
 
         $session = \Stripe\Checkout\Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.failure', [], true),
+            'customer' => $customer_id, // Include customer ID if available
         ]);
 
         // Create Order
@@ -84,6 +86,7 @@ class CheckoutController extends Controller
         ];
         Payment::create($paymentData);
 
+        // Clear the cart
         CartItem::where(['user_id' => $user->id])->delete();
 
         return redirect($session->url);
@@ -93,11 +96,12 @@ class CheckoutController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             $session_id = $request->get('session_id');
             $session = \Stripe\Checkout\Session::retrieve($session_id);
+
             if (!$session) {
                 return view('checkout.failure', ['message' => 'Invalid Session ID']);
             }
@@ -106,16 +110,24 @@ class CheckoutController extends Controller
                 ->where(['session_id' => $session_id])
                 ->whereIn('status', [PaymentStatus::Pending, PaymentStatus::Paid])
                 ->first();
+            
             if (!$payment) {
                 throw new NotFoundHttpException();
             }
+
             if ($payment->status === PaymentStatus::Pending->value) {
                 $this->updateOrderAndSession($payment);
             }
-            $customer = \Stripe\Customer::retrieve($session->customer);
-            return view('checkout.success', compact('customer'));
+
+            // Stripe session customer might be null, use customer details from the session
+            $customerDetails = $session->customer_details;
+
+            return view('checkout.success', [
+                'customer' => $customerDetails
+            ]);
+
         } catch (NotFoundHttpException $e) {
-            throw $e;
+            return view('checkout.failure', ['message' => 'Order not found']);
         } catch (\Exception $e) {
             return view('checkout.failure', ['message' => $e->getMessage()]);
         }
@@ -123,12 +135,12 @@ class CheckoutController extends Controller
 
     public function failure(Request $request)
     {
-        return view('checkout.failure', ['message' => ""]);
+        return view('checkout.failure', ['message' => "Payment was unsuccessful."]);
     }
 
     public function checkoutOrder(Order $order, Request $request)
     {
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $lineItems = [];
         foreach ($order->items as $item) {
@@ -137,7 +149,7 @@ class CheckoutController extends Controller
                     'currency' => 'usd',
                     'product_data' => [
                         'name' => $item->product->title,
-//                        'images' => [$product->image]
+                        // 'images' => [$product->image]
                     ],
                     'unit_amount' => $item->unit_price * 100,
                 ],
@@ -155,15 +167,14 @@ class CheckoutController extends Controller
         $order->payment->session_id = $session->id;
         $order->payment->save();
 
-
         return redirect($session->url);
     }
 
     public function webhook()
     {
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $endpoint_secret = 'sk_test_51PxuiCEWrFbJx9RtrkNtXqNpjwuNUHZnkPlnGVkeqWPYjRK1erJda3T32tVQUcQEr9YCm97tmCyOTeeebYC3edT300VeDdgwpy';
+        $endpoint_secret = config('services.stripe.webhook_secret');
 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
@@ -184,18 +195,19 @@ class CheckoutController extends Controller
         // Handle the event
         switch ($event->type) {
             case 'checkout.session.completed':
-                $paymentIntent = $event->data->object;
-                $sessionId = $paymentIntent['id'];
+                $sessionId = $event->data->object->id;
 
                 $payment = Payment::query()
                     ->where(['session_id' => $sessionId, 'status' => PaymentStatus::Pending])
                     ->first();
+                
                 if ($payment) {
                     $this->updateOrderAndSession($payment);
                 }
-            // ... handle other event types
+                break;
+            // Handle other event types as needed
             default:
-                echo 'Received unknown event type ' . $event->type;
+                return response('Received unknown event type ' . $event->type, 200);
         }
 
         return response('', 200);
@@ -204,12 +216,10 @@ class CheckoutController extends Controller
     private function updateOrderAndSession(Payment $payment)
     {
         $payment->status = PaymentStatus::Paid;
-        $payment->update();
+        $payment->save();
 
         $order = $payment->order;
-
         $order->status = OrderStatus::Paid;
-        $order->update();
-
+        $order->save();
     }
 }
