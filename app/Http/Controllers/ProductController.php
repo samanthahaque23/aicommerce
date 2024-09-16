@@ -16,26 +16,12 @@ class ProductController extends Controller
         // Fetch the regular products from the database
         $products = Product::query()->orderBy('updated_at', 'desc')->paginate(8);
         $heroProducts = $products->take(5);
-        // Fetch top-loved products from the Flask API
-        $topLovedResponse = Http::get('http://127.0.0.1:5000/api/top_loved_products');
-
-        // Check if the API request is successful
-        if ($topLovedResponse->successful()) {
-            $topLovedProducts = $topLovedResponse->json();  // Get the top-loved products from the Flask API
-        } else {
-            $topLovedProducts = [];  // Fallback to an empty array if the API request fails
-        }
-
-        // Debugging: Check the response of topLovedProducts
-        if (empty($topLovedProducts)) {
-            dd('No top loved products available', $topLovedResponse->status());
-        }
+        
 
         // Return the view with both regular products and top-loved products
         return view('product.index', [
             'products' => $products,
             'heroProducts' => $heroProducts,
-            'topLovedProducts' => $topLovedProducts // Pass top-loved products to the view
         ]);
     }
 
@@ -69,35 +55,7 @@ class ProductController extends Controller
         return view('product.description', compact('product'));
     }
 
-    // New method to handle the route for top-loved products only
-    public function showTopLoved()
-    {
-        // Fetch top-loved products from the Flask API
-        $topLovedResponse = Http::get('http://127.0.0.1:5000/api/top_loved_products');
-
-        // Check if the API request is successful
-        if ($topLovedResponse->successful()) {
-            $topLovedProducts = $topLovedResponse->json();  // Get the top-loved products from the Flask API
-        } else {
-            $topLovedProducts = [];  // Fallback to an empty array if the API request fails
-        }
-
-        // Debugging: Check the response of topLovedProducts
-        if (empty($topLovedProducts)) {
-            dd('No top loved products available', $topLovedResponse->status());
-        }
-
-        // Return the view with top-loved products
-        return view('product.top_loved', [
-            'topLovedProducts' => $topLovedProducts // Pass top-loved products to the view
-        ]);
-    }
-
-    // Show the recommendation form (GET request)
-    public function showRecommendationForm()
-    {
-        return view('product.form');  // This should match the path 'resources/views/product/form.blade.php'
-    }
+  
 
     
 }

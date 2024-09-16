@@ -5,10 +5,13 @@
         </h1>
         
         <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+            <div class="aspect-w-1 aspect-h-1 max-w-md mx-auto">
+                <img src="{{ $product->image }}" alt="Product Image" class="w-full h-auto object-cover rounded-lg"/>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-4 mb-6">
             <h1 class="text-bold text-lg font-medium mb-2">Allergens</h1>
-            {{-- <div class="text-gray-700 mb-4">
-                {!! $product->description !!}
-            </div> --}}
 
             @php
                 // Assuming the allergens are listed in the description separated by commas

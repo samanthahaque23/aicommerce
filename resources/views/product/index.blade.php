@@ -1,44 +1,6 @@
 <x-app-layout>
 
-    <!-- Hero Image Slider Section -->
-    <section class="hero-slider relative w-full h-[500px] mb-10" style="border: 30px solid #000">
-        <div class="swiper-container bg-yellow-500" style="height: 500px;">
-            <div class="swiper-wrapper">
-                @foreach($heroProducts as $product)
-                    <div class="swiper-slide flex items-center">
-                        <!-- Product Image on the left -->
-                        <div class="w-1/2 h-3/4">
-                            <img
-                                src="{{ $product->image }}" 
-                                alt="{{ $product->title }}"
-                                class="object-cover w-full h-full"
-                            />
-                        </div>
-                        
-                        <!-- Overlay Content on the right -->
-                        <div class="w-1/2 h-full text-white flex flex-col justify-center p-10">
-                            <p class=" mb-2" style="font-size: 50px;font-weight:700;text-tranform:capitalize">{{ $product->title }}</p>
-                            {{-- <h3 class="text-2xl mb-4">{{ $product->brand_name ?? 'Brand Name' }}</h3> --}}
-                            
-                            <!-- Check if the slug exists before using it in the link -->
-                            @if($product->slug)
-                                <a href="{{ route('product.view', $product->slug) }}" style="width:400px;height:70px;font-size:30px;text-align:center;font-weight:700" class="bg-black text-white py-2 px-6 rounded-lg hover:bg-reds-800 transition-all">
-                                    Shop Now
-                                </a>
-                            @else
-                                <button disabled class="bg-black text-white py-2 px-6 rounded-md">
-                                    Shop Now
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-    
-            <!-- Add Pagination and Navigation if required -->
-            <div class="swiper-pagination"></div>
-        </div>
-    </section>
+ 
     
     <!-- All Products Section -->
     <section class="all-products p-10">
