@@ -1,40 +1,41 @@
 <header
-    x-data="{mobileMenuOpen: false}"
+    x-data="{ mobileMenuOpen: false }"
     class="flex justify-between bg-black shadow-md text-white"
 >
-    <div class="px-10 text-yellow-500" style="font-size: 50px;font-weight:900;display:flex;align-items:center;">
-    Know Your Food
+    <div class="px-10 text-yellow-500" style="font-size: 50px; font-weight:900; display:flex; align-items:center;">
+        Know Your Food
     </div>
+
     <!-- Responsive Menu -->
     <div
-        class="block fixed z-10 top-0 bottom-0 height h-full w-[220px] transition-all bg-slate-900 md:hidden"
+        class="block fixed z-10 top-0 bottom-0 h-full w-[220px] transition-all bg-slate-900 md:hidden"
         :class="mobileMenuOpen ? 'left-0' : '-left-[220px]'"
     >
         <ul>
-           
+            <!-- Check if the user is authenticated -->
             @if (!Auth::guest())
-                <li x-data="{open: false}" class="relative">
+                <li x-data="{ open: false }" class="relative">
                     <a
                         @click="open = !open"
                         class="cursor-pointer flex justify-between items-center py-2 px-3 hover:bg-slate-800"
                     >
-              <span class="flex items-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                  <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                {{ Auth::user()->name }}
-              </span>
+                        <span class="flex items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 mr-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                            </svg>
+                            {{ Auth::user()->name }}
+                        </span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5"
@@ -53,18 +54,15 @@
                         x-transition
                         class="z-10 right-0 bg-slate-800 py-2"
                     >
-                       
-                       
-                       
+                        <!-- Logout Option -->
                         <li class="hover:bg-slate-900">
-                            <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-
-                                <a href="{{ route('logout') }}"
-                                   class="flex items-center px-3 py-2 hover:bg-slate-900"
-                                   onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                <a
+                                    href="{{ route('logout') }}"
+                                    class="flex items-center px-3 py-2 hover:bg-slate-900"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         class="h-5 w-5 mr-2"
@@ -85,7 +83,18 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- New "Update Items" Button for Admins -->
+                <li>
+                    <a
+                        href="{{ route('admin.products.index') }}"
+                        class="block text-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-600 active:bg-yellow-800 transition-colors w-full"
+                    >
+                        Update Items
+                    </a>
+                </li>
             @else
+                <!-- If user is not authenticated -->
                 <li>
                     <a
                         href="{{ route('login') }}"
@@ -119,33 +128,33 @@
             @endif
         </ul>
     </div>
-    <!--/ Responsive Menu -->
+
+    <!-- Desktop Menu -->
     <nav class="hidden md:block">
         <ul class="grid grid-flow-col items-center">
-           
             @if (!Auth::guest())
-                <li x-data="{open: false}" class="relative">
+                <li x-data="{ open: false }" class="relative">
                     <a
                         @click="open = !open"
                         class="cursor-pointer flex items-center py-navbar-item px-navbar-item pr-5 hover:bg-slate-900"
                     >
-              <span class="flex items-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                  <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                {{ Auth::user()->name }}
-              </span>
+                        <span class="flex items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 mr-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                            </svg>
+                            {{ Auth::user()->name }}
+                        </span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5 ml-2"
@@ -166,16 +175,14 @@
                         x-cloak
                         class="absolute z-10 right-0 bg-slate-800 py-2 w-48"
                     >
-                       
-                      
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-
-                                <a href="{{ route('logout') }}"
-                                   class="flex px-3 py-2 hover:bg-slate-900"
-                                   onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                <a
+                                    href="{{ route('logout') }}"
+                                    class="flex px-3 py-2 hover:bg-slate-900"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         class="h-5 w-5 mr-2"
@@ -195,6 +202,16 @@
                             </form>
                         </li>
                     </ul>
+                </li>
+
+                <!-- Add Update Items for logged-in users -->
+                <li>
+                    <a
+                        href="{{ route('admin.products.index') }}"
+                        class="inline-flex items-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-600 active:bg-yellow-800 transition-colors mx-5"
+                    >
+                        Update Items
+                    </a>
                 </li>
             @else
                 <li>
@@ -222,7 +239,7 @@
                 <li>
                     <a
                         href="{{ route('register') }}"
-                        class="inline-flex items-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-500 active:bg-yellow-800 transition-colors mx-5"
+                        class="inline-flex items-center text-white bg-yellow-500 py-2 px-3 rounded shadow-md hover:bg-yellow-600 active:bg-yellow-800 transition-colors mx-5"
                     >
                         Register now
                     </a>
@@ -230,6 +247,8 @@
             @endif
         </ul>
     </nav>
+
+    <!-- Mobile menu button -->
     <button
         @click="mobileMenuOpen = !mobileMenuOpen"
         class="p-4 block md:hidden"
