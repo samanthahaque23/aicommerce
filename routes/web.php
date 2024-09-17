@@ -3,18 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 // Home page route
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
-// Route for top-loved products
-Route::get('/top_loved', [ProductController::class, 'showTopLoved'])->name('product.top_loved');
 
-// Route to show the recommendation form (GET)
-Route::get('/recommend', [ProductController::class, 'showRecommendationForm'])->name('product.recommend_form');
-
-// Route to handle the recommendation request (POST)
-Route::post('/recommend', [ProductController::class, 'getRecommendations'])->name('product.recommend');
 
 // Route for viewing a single product
 Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
@@ -28,5 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::resource('products', AdminController::class);
+});
 require __DIR__.'/auth.php';

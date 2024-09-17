@@ -37,32 +37,7 @@
                         </h3>
                         <h5 class="font-bold">${{ $product->price }}</h5>
                     </div>
-                    <!-- Button Area -->
-                    <div class="flex justify-between items-center py-3 px-4 mt-auto">
-                        <button
-                            @click="addToWatchlist()"
-                            class="w-10 h-10 rounded-full border border-1 border-yellow-500 flex items-center justify-center hover:bg-yellow-500 hover:text-white active:bg-purple-800 transition-colors"
-                            :class="isInWatchlist(id) ? 'bg-yellow-500 text-white' : 'text-yellow-500'"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
-                        </button>
-                        <button class="btn-primary bg-yellow-500 hover:bg-black" @click="addToCart(id)">
-                            Add to Cart
-                        </button>
-                    </div>
+                   
                 </div>
             @endforeach
         </div>
@@ -75,7 +50,7 @@
             <div>
                 <h3 class="text-2xl text-yellow-500 font-bold mb-4">About Us</h3>
                 <p class="text-white">
-                    We provide the best beauty products that you will absolutely love. Discover our wide range of products from top brands at unbeatable prices.
+                    We provide the best  products that you will absolutely love. Discover our wide range of products from top brands at unbeatable prices.
                 </p>
             </div>
     
